@@ -29,4 +29,15 @@ public class Parse {
          */
         return commandoutput.stream().anyMatch(x -> commandoutput.contains("lsof version"));
     }
+
+    public static String getlsofVersion(){
+        final ArrayList <String> commandoutput = execCommand(new String[]{"lsof", "-v"});
+        if(commandoutput == null)return null;
+        for (String line : commandoutput) {
+            if (line.contains("revision")) {
+                return line.replaceAll("revision:","").trim();
+            }
+        }
+        return null;
+    }
 }
