@@ -7,15 +7,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExecCommand {
-    public static boolean islsofEnable(){
+
+    /**
+     * @param cmdarray cmdをString[]で渡しなさい。
+     * @return ArrayListに出力をまとめる、エラーが出ればnull
+     */
+    public static ArrayList<String> execCommand(String[] cmdarray){
+        ArrayList<String> outputlines = new ArrayList<>();
         try {
             //http://n-agetsuma.hatenablog.com/entry/2014/02/12/215321
-            ProcessBuilder pb = new ProcessBuilder("lsof","-v");
+            ProcessBuilder pb = new ProcessBuilder(cmdarray);
             Process lsof = pb.start();
             lsof.waitFor();
 
             //listを用意
-            ArrayList<String> outputlines = new ArrayList<>();
 
             // 実行結果を取得するストリームの種別を出力
             System.out.println(pb.redirectInput());
@@ -30,8 +35,8 @@ public class ExecCommand {
             }
         } catch (IOException | InterruptedException e) {
             if(Main.debug)e.printStackTrace();
-            return false;
+            return null;
         }
-        return true;
+        return outputlines;
     }
 }
