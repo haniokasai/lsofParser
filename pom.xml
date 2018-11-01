@@ -47,7 +47,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.haniokasai.pureftpd.Main</mainClass>
+                            <mainClass>com.haniokasai.lsofParser.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
