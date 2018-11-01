@@ -40,4 +40,41 @@ public class Parse {
         }
         return null;
     }
+
+    //TODO processリストの方を作って、それにプロセス名、pid、tcp,udpなど書く。
+    //TODO ProcessListOption型　COMMAND   PID     USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
+    //lsof -i:80
+    /*
+    # lsof -i:80
+    COMMAND   PID     USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
+    nginx   14900     root    7u  IPv4 1684384      0t0  TCP *:http (LISTEN)
+    nginx   14900     root    9u  IPv6 1684386      0t0  TCP *:http (LISTEN)
+    nginx   20548 www-data    7u  IPv4 1684384      0t0  TCP *:http (LISTEN)
+    nginx   20548 www-data    9u  IPv6 1684386      0t0  TCP *:http (LISTEN)
+    nginx   20549 www-data    7u  IPv4 1684384      0t0  TCP *:http (LISTEN)
+    nginx   20549 www-data    9u  IPv6 1684386      0t0  TCP *:http (LISTEN)
+    nginx   20550 www-data    7u  IPv4 1684384      0t0  TCP *:http (LISTEN)
+    nginx   20550 www-data    9u  IPv6 1684386      0t0  TCP *:http (LISTEN)
+    nginx   20551 www-data    7u  IPv4 1684384      0t0  TCP *:http (LISTEN)
+    nginx   20551 www-data    9u  IPv6 1684386      0t0  TCP *:http (LISTEN)
+
+     */
+    public static String getProcessFromPort(int port,ProcessListOption option){
+
+    }
+
+    //https://unix.stackexchange.com/a/157824
+    //lsof -Pan -p PID -i
+    /*
+    # lsof -Pan -p 26463 -i
+    lsof: WARNING: can't stat() fuse.gvfsd-fuse file system /run/user/114/gvfs
+    Output information may be incomplete.
+    COMMAND     PID    USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
+    Main\x20T 26463 root    6u  IPv4 4324999      0t0  UDP *:31076
+    Main\x20T 26463 root    7u  IPv6 4325000      0t0  UDP *:31077
+     */
+    public static String getProcessFromPid(int port,ProcessListOption option){
+
+    }
+
 }
