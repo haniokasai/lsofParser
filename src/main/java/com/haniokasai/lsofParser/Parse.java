@@ -7,11 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.haniokasai.lsofParser.ExecCommand.execCommand;
 
 public class Parse {
     public static boolean islsofEnable(){
-        final ArrayList <String> commandoutput = execCommand(new String[]{"lsof", "-v"});
+        final ArrayList <String> commandoutput = new ExecCommand().execCommand(new String[]{"lsof", "-v"});
         if(commandoutput == null)return false;
         //https://teratail.com/questions/11397
         /*
@@ -33,7 +32,7 @@ public class Parse {
     }
 
     public static String getlsofVersion(){
-        final ArrayList <String> commandoutput = execCommand(new String[]{"lsof", "-v"});
+        final ArrayList <String> commandoutput = new ExecCommand().execCommand(new String[]{"lsof", "-v"});
         if(commandoutput == null)return null;
         for (String line : commandoutput) {
             if (line.contains("revision")) {
@@ -57,7 +56,7 @@ public class Parse {
      */
     public static ArrayList<String> getPidFromPort(int port){
         ArrayList <String> pids = new ArrayList<>();
-        final ArrayList <String> commandoutput = execCommand(new String[]{"lsof", "-i:"+String.valueOf(port)});
+        final ArrayList <String> commandoutput = new ExecCommand().execCommand(new String[]{"lsof", "-i:"+String.valueOf(port)});
         if(commandoutput == null)return null;
         for (String line : commandoutput) {
             if (line.contains("IPv")) {
@@ -87,7 +86,7 @@ public class Parse {
     Main\x20T 26463 root    7u  IPv6 4325000      0t0  UDP *:31077
      */
     public static int getIPv4PortFromPid(int pid){
-        final ArrayList <String> commandoutput = execCommand(new String[]{"lsof", "-Pan","-p", String.valueOf(pid),"-i"});
+        final ArrayList <String> commandoutput = new ExecCommand().execCommand(new String[]{"lsof", "-Pan","-p", String.valueOf(pid),"-i"});
         if(commandoutput == null)return 0;
         for (String line : commandoutput) {
             if (line.contains("IPv4")) {

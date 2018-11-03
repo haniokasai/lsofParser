@@ -1,8 +1,6 @@
 package com.haniokasai.lsofParser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,31 +10,59 @@ public class ExecCommand {
      * @param cmdarray cmdをString[]で渡しなさい。
      * @return ArrayListに出力をまとめる、エラーが出ればnull
      */
-    public static ArrayList<String> execCommand(String[] cmdarray){
-        ArrayList<String> outputlines = new ArrayList<>();
+
+    public  ArrayList<String> execCommand(String[] cmdarray){
         try {
-            //http://n-agetsuma.hatenablog.com/entry/2014/02/12/215321
-            ProcessBuilder pb = new ProcessBuilder(cmdarray);
-            Process lsof = pb.start();
-            lsof.waitFor();
+            ProcessBuilder builder = new ProcessBuilder(cmdarray);
+            builder.redirectErrorStream(true);
 
-            //listを用意
+            Process process = builder.start();
+            OutputStream stdin = process.getOutputStream();
+            InputStream is = process.getInputStream();
 
-            // 実行結果を取得するストリームの種別を出力
-            System.out.println(pb.redirectInput());
-
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(lsof.getInputStream()))) {
-                //結果の出力
-                for(String line = br.readLine(); line != null; line = br.readLine()) {
-                    outputlines.add(line);
-                    if(Main.debug)System.out.println(line);
-                }
-            }
-        } catch (IOException | InterruptedException e) {
+            OutputLogger ol = new OutputLogger(is, process);
+            ol.start();
+            while(process.isAlive()){}
+            if(Main.debug) System.out.println(ol.outputlines);
+            return ol.outputlines;
+        } catch (IOException e) {
             if(Main.debug)e.printStackTrace();
             return null;
         }
-        return outputlines;
+
+    }
+
+
+}
+
+class OutputLogger extends Thread {
+    private final InputStream is;
+    private final Process pr;
+    public ArrayList<String> outputlines;
+
+    public OutputLogger(InputStream is, Process pr) {
+        this.is = is;
+        this.pr = pr;
+        outputlines = new ArrayList<>();
+    }
+
+    @Override
+    public void run() {
+        try {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
+                for (; ; ) {
+                    String line = br.readLine();
+                    if (line == null) break;
+                    //System.out.println("[" + title + "]" + line);
+                    try {
+                        outputlines.add(line);
+                    } catch (NullPointerException e) {
+                        if (Main.debug) e.printStackTrace();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            if (Main.debug) e.printStackTrace();
+        }
     }
 }
