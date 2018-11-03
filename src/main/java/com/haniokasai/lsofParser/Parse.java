@@ -28,7 +28,12 @@ public class Parse {
         /dev warnings are disabled.
         Kernel ID check is disabled.
          */
-        return commandoutput.stream().anyMatch(x -> commandoutput.contains("lsof version"));
+        for (String line : commandoutput) {
+            if (line.contains("lsof")&&line.contains("version")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static String getlsofVersion(){
@@ -60,9 +65,9 @@ public class Parse {
         if(commandoutput == null)return null;
         for (String line : commandoutput) {
             if (line.contains("IPv")) {
-                List<String> str = Arrays.asList(line.split(" ", 0));
+                List<String> str = new ArrayList<>(Arrays.asList(line.split(" ", 0)));
                 if(Main.debug)System.out.println(str);
-                str.removeIf(String::isEmpty);
+                str.removeAll(Arrays.asList("", null));
                 if(Main.debug)System.out.println(str);
                 if(Main.debug)System.out.println(str.get(1));
                 pids.add(str.get(1));
@@ -90,7 +95,7 @@ public class Parse {
         if(commandoutput == null)return 0;
         for (String line : commandoutput) {
             if (line.contains("IPv4")) {
-                List<String> str = Arrays.asList(line.split(" ", 0));
+                List<String> str = new ArrayList<>(Arrays.asList(line.split(" ", 0)));
                 if (Main.debug) System.out.println(str);
                 str.removeIf(String::isEmpty);
                 if (Main.debug) System.out.println(str);
