@@ -59,12 +59,12 @@ public class Parse {
     nginx   14900     root    9u  IPv6 1684386      0t0  TCP *:http (LISTEN)
     nginx   20548 www-data    7u  IPv4 1684384      0t0  TCP *:http (LISTEN)
      */
-    public static ArrayList<String> getPidFromPort(int port){
+    public static ArrayList<String> getPidFromIPv4Port(int port){
         ArrayList <String> pids = new ArrayList<>();
         final ArrayList <String> commandoutput = new ExecCommand().execCommand(new String[]{"lsof", "-i:"+String.valueOf(port)});
         if(commandoutput == null)return null;
         for (String line : commandoutput) {
-            if (line.contains("IPv")) {
+            if (line.contains("IPv4")) {
                 List<String> str = new ArrayList<>(Arrays.asList(line.split(" ", 0)));
                 if(Main.debug)System.out.println(str);
                 str.removeAll(Arrays.asList("", null));

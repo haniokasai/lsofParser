@@ -26,7 +26,7 @@ public class Main {
                         System.out.println(getIPv4PortFromPid(Integer.parseInt(args[1])));
                         break;
                     case "getpid":
-                        System.out.println(getPidFromPort(Integer.parseInt(args[1])));
+                        System.out.println(getPidFromIPv4Port(Integer.parseInt(args[1])));
                     break;
                 }
                 break;
